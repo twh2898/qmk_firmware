@@ -23,6 +23,10 @@ enum layers {
     NUM_LAYERS,
 };
 
+enum my_keycodes {
+    MY_MXTG = SAFE_RANGE,
+};
+
 // clang-format off
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -42,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
         KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,   KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
-        KC_LCTL, RGB_TOG, KC_LGUI, KC_LALT, TL_LOWR, KC_SPC,          TL_UPPR, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT),
+        KC_LCTL, MY_MXTG, KC_LGUI, KC_LALT, TL_LOWR, KC_SPC,          TL_UPPR, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT),
 
     /* Lower
      * ,-----------------------------------------------------------------------------------.
@@ -143,7 +147,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
 #define RBG_VAL 120
 
+bool rainbow = true;
+enum layers last_layer = _QWERTY;
+extern rgb_config_t rbg_matrix_config;
+
 void bg_layer(enum layers layer) {
+    rgblight_mode(RGBLIGHT_MODE_STATIC_LIGHT);
     switch (layer) {
         default:
         case _QWERTY:
@@ -161,18 +170,17 @@ void bg_layer(enum layers layer) {
     }
 }
 
-void keyboard_post_init_user(void) {
-    rgblight_mode(RGBLIGHT_MODE_STATIC_LIGHT);
-    bg_layer(_QWERTY);
-    rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
-}
-
-layer_state_t layer_state_set_user(layer_state_t state) {
-    bg_layer(biton32(state));
-    switch (biton32(state)) {
+void fg_layer(enum layers layer) {
+    switch (layer) {
         default:
         case _QWERTY:
-            rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+            if (rainbow) {
+                rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+            }
+            else {
+                rgb_matrix_mode(RGB_MATRIX_NONE);
+                // TODO: set key colors
+            }
             break;
         case _LOWER:
             rgb_matrix_mode(RGB_MATRIX_NONE);
@@ -184,5 +192,30 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             rgb_matrix_mode(RGB_MATRIX_NONE);
             break;
     }
+}
+
+void keyboard_post_init_user(void) {
+    last_layer = _QWERTY;
+    bg_layer(last_layer);
+    fg_layer(last_layer);
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    last_layer = biton32(state);
+    bg_layer(last_layer);
+    fg_layer(last_layer);
     return state;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case MY_MXTG:
+      if (record->event.pressed) {
+          rainbow = !rainbow;
+          fg_layer(last_layer);
+      }
+      return false; // Skip all further processing of this key
+    default:
+      return true; // Process all other keycodes normally
+  }
 }
