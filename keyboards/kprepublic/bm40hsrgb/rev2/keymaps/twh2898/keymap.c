@@ -144,27 +144,26 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
 #endif // RGB_MATRIX_ENABLED
 
-#define RBG_VAL 120
-
 bool rainbow = true;
 enum layers last_layer = _QWERTY;
 extern rgb_config_t rbg_matrix_config;
 
 void bg_layer(enum layers layer) {
     rgblight_mode(RGBLIGHT_MODE_STATIC_LIGHT);
+    int v = rgb_matrix_config.hsv.v;
     switch (layer) {
         default:
         case _QWERTY:
-            rgblight_sethsv(106, 100, RBG_VAL);
+            rgblight_sethsv(106, 100, v);
             break;
         case _LOWER:
-            rgblight_sethsv_noeeprom(64, 200, RBG_VAL);
+            rgblight_sethsv_noeeprom(64, 200, v);
             break;
         case _RAISE:
-            rgblight_sethsv_noeeprom(0, 180, RBG_VAL);
+            rgblight_sethsv_noeeprom(0, 180, v);
             break;
         case _ADJUST:
-            rgblight_sethsv_noeeprom(201, 140, RBG_VAL);
+            rgblight_sethsv_noeeprom(201, 140, v);
             break;
     }
 }
@@ -176,18 +175,18 @@ void fg_layer(enum layers layer) {
             if (rainbow) {
                 rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
             } else {
-                rgb_matrix_mode(RGB_MATRIX_NONE);
+                rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
                 // TODO: set key colors
             }
             break;
         case _LOWER:
-            rgb_matrix_mode(RGB_MATRIX_NONE);
+            rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
             break;
         case _RAISE:
-            rgb_matrix_mode(RGB_MATRIX_NONE);
+            rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
             break;
         case _ADJUST:
-            rgb_matrix_mode(RGB_MATRIX_NONE);
+            rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
             break;
     }
 }
