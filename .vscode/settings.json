@@ -7,7 +7,14 @@
         "**/.build": true,
         "**/*.hex": true,
         "**/*.bin": true,
-        "**/*.uf2": true
+        "**/*.uf2": true,
+        "keyboards/[^k]*": true,
+        "keyboards/k[^p]*": true,
+        "keyboards/kprepublic/[^b]*": true,
+        "keyboards/kprepublic/bm[^4]*": true,
+        "keyboards/kprepublic/bm4[^0]*": true,
+        "keyboards/kprepublic/bm40*/rev1": true,
+        "keyboards/kprepublic/bm40*/readme.md": true
     },
     "files.associations": {
         "*.h": "c",
