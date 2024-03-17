@@ -46,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Lower
      * ,-----------------------------------------------------------------------------------.
-     * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Del  |
+     * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  |      |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
      * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |      |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -56,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------------------------------'
      */
     [_LOWER] = LAYOUT_ortho_4x12_1x2uC(
-        KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
+        KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
         KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
         _______, _______, _______, _______, _______, _______, _______, KC_PGUP, KC_PGDN, KC_HOME, KC_END,  _______,
         _______, _______, _______, _______, _______,          _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY),
@@ -66,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Raise
      * ,-----------------------------------------------------------------------------------.
-     * |      |      | Up   |      |      |      |      |      |      |      |      |      |
+     * |      |      | Up   |      |      |      |      |      |      |      |      | Del  |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
      * |      | Left | Down |Right |      |      |      |   -  |   =  |   [  |   ]  |  \   |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -76,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------------------------------'
      */
     [_RAISE] = LAYOUT_ortho_4x12_1x2uC(
-        _______, _______, KC_UP,   _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, KC_UP,   _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL,
         _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______,          _______, _______, KC_MPRV, KC_VOLD, KC_VOLU, KC_MPLY),
@@ -148,16 +148,16 @@ void bg_layer(enum layers layer) {
     switch (layer) {
         default:
         case _QWERTY:
-            rgblight_sethsv(32, 255, RBG_VAL);
+            rgblight_sethsv(106, 170, RBG_VAL);
             break;
         case _LOWER:
-            rgblight_sethsv_noeeprom(72, 221, RBG_VAL);
+            rgblight_sethsv_noeeprom(64, 200, RBG_VAL);
             break;
         case _RAISE:
-            rgblight_sethsv_noeeprom(0, 0, RBG_VAL);
+            rgblight_sethsv_noeeprom(0, 180, RBG_VAL);
             break;
         case _ADJUST:
-            rgblight_sethsv_noeeprom(255, 0, RBG_VAL);
+            rgblight_sethsv_noeeprom(201, 140, RBG_VAL);
             break;
     }
 }
