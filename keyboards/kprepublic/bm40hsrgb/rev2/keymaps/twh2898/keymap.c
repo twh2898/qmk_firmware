@@ -16,12 +16,14 @@
 #include QMK_KEYBOARD_H
 
 enum layers {
-  _QWERTY = 0,
-  _LOWER,
-  _RAISE,
-  _ADJUST,
-  NUM_LAYERS,
+    _QWERTY = 0,
+    _LOWER,
+    _RAISE,
+    _ADJUST,
+    NUM_LAYERS,
 };
+
+// clang-format off
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -97,50 +99,52 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______,          _______, _______, _______, _______, _______, _______)
 };
 
-//#define MATRIX_ROWS 4
-//#define MATRIX_COLS 12
+// clang-format on
+
+// #define MATRIX_ROWS 4
+// #define MATRIX_COLS 12
 //
-//#ifdef RGB_MATRIX_ENABLED
-//bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-//    RGB ledcol[NUM_LAYERS] = { {RGB_BLUE}, {RGB_CYAN}, {RGB_RED}, {RGB_PURPLE}, {RGB_GREEN} };
-//    uint8_t layer = get_highest_layer(layer_state);
+// #ifdef RGB_MATRIX_ENABLED
+// bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+//     RGB ledcol[NUM_LAYERS] = { {RGB_BLUE}, {RGB_CYAN}, {RGB_RED}, {RGB_PURPLE}, {RGB_GREEN} };
+//     uint8_t layer = get_highest_layer(layer_state);
 //
-//  // For special layers: Set the key LEDs, overwriting effects
-//  if (layer > _QWERTY) {
-//    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-//      for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-//        uint8_t index = g_led_config.matrix_co[row][col];
+//   // For special layers: Set the key LEDs, overwriting effects
+//   if (layer > _QWERTY) {
+//     for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+//       for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+//         uint8_t index = g_led_config.matrix_co[row][col];
 //
-//        // Valid LED on that position?
-//        if ((index >= led_min) && (index < led_max) && (index != NO_LED)) {
-//          // Highlight keys with special functions
-//          if (keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
-//            rgb_matrix_set_color(index, ledcol[layer].g, ledcol[layer].r, ledcol[layer].b);
-//          }
-//        }
-//      }
-//    }
-//  }
+//         // Valid LED on that position?
+//         if ((index >= led_min) && (index < led_max) && (index != NO_LED)) {
+//           // Highlight keys with special functions
+//           if (keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
+//             rgb_matrix_set_color(index, ledcol[layer].g, ledcol[layer].r, ledcol[layer].b);
+//           }
+//         }
+//       }
+//     }
+//   }
 //
-//  // All layers: Underglow and Indicators (with reduced intensity)
-//  for (uint8_t i = led_min; i < led_max; i++) {
-//    if (g_led_config.flags[i] == LED_FLAG_UNDERGLOW) {
-//      rgb_matrix_set_color(i, ledcol[layer].g, ledcol[layer].r, ledcol[layer].b);
-//    }
-//    if (g_led_config.flags[i] == LED_FLAG_INDICATOR) {
-//      rgb_matrix_set_color(i, ledcol[layer].g>>4, ledcol[layer].r>>4, ledcol[layer].b>>4);
-//    }
-//  }
+//   // All layers: Underglow and Indicators (with reduced intensity)
+//   for (uint8_t i = led_min; i < led_max; i++) {
+//     if (g_led_config.flags[i] == LED_FLAG_UNDERGLOW) {
+//       rgb_matrix_set_color(i, ledcol[layer].g, ledcol[layer].r, ledcol[layer].b);
+//     }
+//     if (g_led_config.flags[i] == LED_FLAG_INDICATOR) {
+//       rgb_matrix_set_color(i, ledcol[layer].g>>4, ledcol[layer].r>>4, ledcol[layer].b>>4);
+//     }
+//   }
 //
-//  return false;
-//}
+//   return false;
+// }
 //
-//#endif // RGB_MATRIX_ENABLED
+// #endif // RGB_MATRIX_ENABLED
 
 #define RBG_VAL 100
 
 void bg_layer(enum layers layer) {
-    switch(layer) {
+    switch (layer) {
         default:
         case _QWERTY:
             rgblight_sethsv(32, 170, RBG_VAL);
@@ -163,23 +167,23 @@ void keyboard_post_init_user(void) {
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     bg_layer(biton32(state));
-  switch(biton32(state)) {
-  default:
-  case _QWERTY:
-    // Default colors
-    //rgb_matrix_mode(RGB_MATRIX_HUE_WAVE);
-    break;
-  case _LOWER:
-    // green-ish
-    break;
-  case _RAISE:
-    // Red
-    //rgb_matrix_mode(RGB_MATRIX_CUSTOM_my_cool_effect2);
-    break;
-  case _ADJUST:
-    // Dark Blue
-    //rgb_matrix_mode(RGB_MATRIX_CUSTOM_my_cool_effect);
-    break;
-  }
-  return state;
+    switch (biton32(state)) {
+        default:
+        case _QWERTY:
+            // Default colors
+            // rgb_matrix_mode(RGB_MATRIX_HUE_WAVE);
+            break;
+        case _LOWER:
+            // green-ish
+            break;
+        case _RAISE:
+            // Red
+            // rgb_matrix_mode(RGB_MATRIX_CUSTOM_my_cool_effect2);
+            break;
+        case _ADJUST:
+            // Dark Blue
+            // rgb_matrix_mode(RGB_MATRIX_CUSTOM_my_cool_effect);
+            break;
+    }
+    return state;
 }
