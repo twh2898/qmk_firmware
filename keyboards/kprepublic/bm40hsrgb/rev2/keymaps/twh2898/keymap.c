@@ -65,7 +65,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______, KC_PGUP, KC_PGDN, KC_HOME, KC_END,  _______,
         _______, _______, _______, _______, _______,          _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY),
 
-    // TODO: WASD and numpad on layer Raise
     // TODO: Shift key on mod row (Raise + Alt, Lower + Left)
 
     /* Raise
@@ -110,37 +109,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #ifndef RGB_MATRIX_ENABLED
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    RGB ledcol[NUM_LAYERS] = { {RGB_BLUE}, {RGB_CYAN}, {RGB_GREEN}, {RGB_PURPLE} };
-    uint8_t layer = get_highest_layer(layer_state);
+    RGB     ledcol[NUM_LAYERS] = {{RGB_BLUE}, {RGB_CYAN}, {RGB_GREEN}, {RGB_PURPLE}};
+    uint8_t layer              = get_highest_layer(layer_state);
 
-  // For special layers: Set the key LEDs, overwriting effects
-  if (layer > _QWERTY) {
-    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-      for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-        uint8_t index = g_led_config.matrix_co[row][col];
+    // For special layers: Set the key LEDs, overwriting effects
+    if (layer > _QWERTY) {
+        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+                uint8_t index = g_led_config.matrix_co[row][col];
 
-        // Valid LED on that position?
-        if ((index >= led_min) && (index < led_max) && (index != NO_LED)) {
-          // Highlight keys with special functions
-          if (keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
-            rgb_matrix_set_color(index, ledcol[layer].g, ledcol[layer].r, ledcol[layer].b);
-          }
+                // Valid LED on that position?
+                if ((index >= led_min) && (index < led_max) && (index != NO_LED)) {
+                    // Highlight keys with special functions
+                    if (keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
+                        rgb_matrix_set_color(index, ledcol[layer].g, ledcol[layer].r, ledcol[layer].b);
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
-  // All layers: Underglow and Indicators (with reduced intensity)
-  for (uint8_t i = led_min; i < led_max; i++) {
-    if (g_led_config.flags[i] == LED_FLAG_UNDERGLOW) {
-      rgb_matrix_set_color(i, ledcol[layer].g, ledcol[layer].r, ledcol[layer].b);
+    // All layers: Underglow and Indicators (with reduced intensity)
+    for (uint8_t i = led_min; i < led_max; i++) {
+        if (g_led_config.flags[i] == LED_FLAG_UNDERGLOW) {
+            rgb_matrix_set_color(i, ledcol[layer].g, ledcol[layer].r, ledcol[layer].b);
+        }
+        if (g_led_config.flags[i] == LED_FLAG_INDICATOR) {
+            rgb_matrix_set_color(i, ledcol[layer].g >> 4, ledcol[layer].r >> 4, ledcol[layer].b >> 4);
+        }
     }
-    if (g_led_config.flags[i] == LED_FLAG_INDICATOR) {
-      rgb_matrix_set_color(i, ledcol[layer].g>>4, ledcol[layer].r>>4, ledcol[layer].b>>4);
-    }
-  }
 
-  return false;
+    return false;
 }
 
 #endif // RGB_MATRIX_ENABLED
@@ -176,8 +175,7 @@ void fg_layer(enum layers layer) {
         case _QWERTY:
             if (rainbow) {
                 rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
-            }
-            else {
+            } else {
                 rgb_matrix_mode(RGB_MATRIX_NONE);
                 // TODO: set key colors
             }
@@ -208,14 +206,14 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case MY_MXTG:
-      if (record->event.pressed) {
-          rainbow = !rainbow;
-          fg_layer(last_layer);
-      }
-      return false; // Skip all further processing of this key
-    default:
-      return true; // Process all other keycodes normally
-  }
+    switch (keycode) {
+        case MY_MXTG:
+            if (record->event.pressed) {
+                rainbow = !rainbow;
+                fg_layer(last_layer);
+            }
+            return false; // Skip all further processing of this key
+        default:
+            return true; // Process all other keycodes normally
+    }
 }
